@@ -1,0 +1,22 @@
+@import 'tailwindcss';
+
+@layer base {
+  body {
+    @apply bg-slate-50 font-sans text-slate-900 antialiased;
+  }
+
+  :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+    outline: 2px solid #4f46e5;
+    outline-offset: 2px;
+  }
+
+  :where(input:not([type='checkbox']):not([type='radio']):not([type='hidden']), select, textarea) {
+    @apply rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900;
+  }
+
+  :where(input:not([type='checkbox']):not([type='radio'])):focus-visible,
+  :where(select, textarea):focus-visible {
+    outline: 2px solid #4f46e5;
+    outline-offset: 2px;
+  }
+}

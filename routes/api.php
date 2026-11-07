@@ -1,0 +1,54 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
+    Route::apiResource('branches', App\Http\Controllers\Api\V1\BranchController::class);
+    Route::apiResource('stock-items', App\Http\Controllers\Api\V1\StockItemController::class)->only(['index']);
+    Route::get('stock-items/{stockItem}/attributes', [App\Http\Controllers\Api\V1\StockItemAttributeController::class, 'index']);
+    Route::put('stock-items/{stockItem}/attributes', [App\Http\Controllers\Api\V1\StockItemAttributeController::class, 'update']);
+    Route::apiResource('stock-locations', App\Http\Controllers\Api\V1\StockLocationController::class);
+    Route::apiResource('customers', App\Http\Controllers\Api\V1\CustomerController::class);
+    Route::apiResource('leads', App\Http\Controllers\Api\V1\LeadController::class);
+    Route::post('service-orders/{serviceOrder}/execute', [App\Http\Controllers\Api\V1\ServiceOrderController::class, 'execute']);
+    Route::post('service-orders/{serviceOrder}/cancel', [App\Http\Controllers\Api\V1\ServiceOrderController::class, 'cancel']);
+    Route::get('service-orders/{serviceOrder}/checklists/{checklist}/images', [App\Http\Controllers\Api\V1\ServiceOrderChecklistImageController::class, 'indexForOrder']);
+    Route::post('service-orders/{serviceOrder}/checklists/{checklist}/images', [App\Http\Controllers\Api\V1\ServiceOrderChecklistImageController::class, 'storeForOrder']);
+    Route::delete('service-orders/{serviceOrder}/checklists/{checklist}/images/{image}', [App\Http\Controllers\Api\V1\ServiceOrderChecklistImageController::class, 'destroyForOrder']);
+    Route::patch('service-orders/{serviceOrder}/checklists/{checklist}/images/{image}/primary', [App\Http\Controllers\Api\V1\ServiceOrderChecklistImageController::class, 'makePrimaryForOrder']);
+    Route::apiResource('service-orders', App\Http\Controllers\Api\V1\ServiceOrderController::class)->except(['destroy']);
+    Route::get('service-order-checklists/{checklist}/images', [App\Http\Controllers\Api\V1\ServiceOrderChecklistImageController::class, 'index']);
+    Route::post('service-order-checklists/{checklist}/images', [App\Http\Controllers\Api\V1\ServiceOrderChecklistImageController::class, 'store']);
+    Route::delete('service-order-checklists/{checklist}/images/{image}', [App\Http\Controllers\Api\V1\ServiceOrderChecklistImageController::class, 'destroy']);
+    Route::patch('service-order-checklists/{checklist}/images/{image}/primary', [App\Http\Controllers\Api\V1\ServiceOrderChecklistImageController::class, 'makePrimary']);
+    Route::post('service-order-status-rules/seed-defaults', [App\Http\Controllers\Api\V1\ServiceOrderStatusRuleController::class, 'seedDefaults']);
+    Route::apiResource('service-order-status-rules', App\Http\Controllers\Api\V1\ServiceOrderStatusRuleController::class);
+    Route::apiResource('services', App\Http\Controllers\Api\V1\ServiceController::class);
+    Route::apiResource('service-checklists', App\Http\Controllers\Api\V1\ServiceChecklistController::class);
+    Route::apiResource('technicians', App\Http\Controllers\Api\V1\TechnicianController::class);
+    Route::apiResource('suppliers', App\Http\Controllers\Api\V1\SupplierController::class);
+    Route::get('brands/{brand}/images', [App\Http\Controllers\Api\V1\BrandImageController::class, 'index']);
+    Route::post('brands/{brand}/images', [App\Http\Controllers\Api\V1\BrandImageController::class, 'store']);
+    Route::delete('brands/{brand}/images/{image}', [App\Http\Controllers\Api\V1\BrandImageController::class, 'destroy']);
+    Route::patch('brands/{brand}/images/{image}/primary', [App\Http\Controllers\Api\V1\BrandImageController::class, 'makePrimary']);
+    Route::apiResource('brands', App\Http\Controllers\Api\V1\BrandController::class);
+    Route::apiResource('product-conditions', App\Http\Controllers\Api\V1\ProductConditionController::class);
+    Route::apiResource('categories', App\Http\Controllers\Api\V1\CategoryController::class);
+    Route::get('products/{product}/images', [App\Http\Controllers\Api\V1\ProductImageController::class, 'index']);
+    Route::post('products/{product}/images', [App\Http\Controllers\Api\V1\ProductImageController::class, 'store']);
+    Route::delete('products/{product}/images/{image}', [App\Http\Controllers\Api\V1\ProductImageController::class, 'destroy']);
+    Route::patch('products/{product}/images/{image}/primary', [App\Http\Controllers\Api\V1\ProductImageController::class, 'makePrimary']);
+    Route::get('products/{product}/attributes', [App\Http\Controllers\Api\V1\ProductController::class, 'attributeDefinitions']);
+    Route::get('products/{product}/stock-attributes', [App\Http\Controllers\Api\V1\ProductController::class, 'stockAttributeDefinitions']);
+    Route::put('products/{product}/attributes', [App\Http\Controllers\Api\V1\ProductController::class, 'updateAttributeValues']);
+    Route::apiResource('products', App\Http\Controllers\Api\V1\ProductController::class);
+    Route::delete('images/{image}', [App\Http\Controllers\Api\V1\ImageController::class, 'destroy']);
+    Route::patch('images/{image}/primary', [App\Http\Controllers\Api\V1\ImageController::class, 'makePrimary']);
+    Route::apiResource('product-attributes', App\Http\Controllers\Api\V1\ProductAttributeController::class);
+    Route::apiResource('stock-movements', App\Http\Controllers\Api\V1\StockMovementController::class)->only(['index', 'store']);
+    Route::post('purchase-orders/{purchaseOrder}/receive', [App\Http\Controllers\Api\V1\PurchaseOrderController::class, 'receive']);
+    Route::post('purchase-orders/{purchaseOrder}/cancel', [App\Http\Controllers\Api\V1\PurchaseOrderController::class, 'cancel']);
+    Route::apiResource('purchase-orders', App\Http\Controllers\Api\V1\PurchaseOrderController::class)->except(['destroy']);
+    Route::apiResource('sales', App\Http\Controllers\Api\V1\SaleController::class)->only(['index', 'store', 'show']);
+    Route::post('sales/{sale}/fiscal-document', [App\Http\Controllers\Api\V1\FiscalDocumentController::class, 'store']);
+});

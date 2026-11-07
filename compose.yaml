@@ -1,0 +1,17 @@
+services:
+    localstack:
+        image: localstack/localstack:latest
+        container_name: infocell-localstack
+        restart: unless-stopped
+        ports:
+            - "4566:4566"
+        environment:
+            - SERVICES=s3
+            - DEFAULT_REGION=us-east-1
+        volumes:
+            - localstack_data:/var/lib/localstack
+            - ./docker/localstack/init-s3.sh:/etc/localstack/init/ready.d/init-s3.sh:ro
+
+volumes:
+    localstack_data:
+

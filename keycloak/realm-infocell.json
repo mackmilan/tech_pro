@@ -1,0 +1,135 @@
+{
+  "id": "infocell",
+  "realm": "infocell",
+  "displayName": "Infocell Gestão",
+  "enabled": true,
+  "organizationsEnabled": true,
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "rememberMe": true,
+  "verifyEmail": false,
+  "roles": {
+    "realm": [
+      { "name": "infocell-admin", "description": "Administrador da plataforma" },
+      { "name": "branch-admin", "description": "Administrador de filial" },
+      { "name": "branch-user", "description": "Usuário de filial" },
+      { "name": "crm-user", "description": "Acesso ao módulo CRM" },
+      { "name": "erp-user", "description": "Acesso ao módulo ERP" },
+      { "name": "cashier-user", "description": "Acesso ao módulo Caixa" }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "infocell-web",
+      "name": "Infocell Web",
+      "description": "Aplicação web Infocell Gestão",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "fullScopeAllowed": false,
+      "redirectUris": ["http://localhost:8000/auth/callback"],
+      "webOrigins": ["http://localhost:8000"],
+      "attributes": {
+        "post.logout.redirect.uris": "http://localhost:8000/*",
+        "pkce.code.challenge.method": "S256"
+      },
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "profile",
+        "roles",
+        "email"
+      ],
+      "optionalClientScopes": ["address", "phone", "offline_access", "organization"]
+    },
+    {
+      "clientId": "infocell-api",
+      "name": "Infocell API",
+      "description": "Cliente confidencial para integração serviço-a-serviço",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": false,
+      "redirectUris": [],
+      "webOrigins": [],
+      "defaultClientScopes": ["roles"],
+      "optionalClientScopes": []
+    }
+  ],
+  "clientScopes": [
+    {
+      "name": "organization",
+      "description": "Inclui organização(ões) do usuário nos tokens OIDC",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "organization",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-organization-membership-mapper",
+          "consentRequired": false,
+          "config": {
+            "claim.name": "organization",
+            "jsonType.label": "String",
+            "multivalued": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ],
+  "organizations": [
+    {
+      "name": "infocell-matriz",
+      "alias": "infocell-matriz",
+      "enabled": true,
+      "description": "Organização da matriz Infocell (exemplo de estrutura)",
+      "attributes": {
+        "branchCode": ["MATRIZ"],
+        "organizationType": ["branch"]
+      }
+    }
+  ],
+  "users": [
+    {
+      "username": "service-account-infocell-api",
+      "enabled": true,
+      "serviceAccountClientId": "infocell-api",
+      "clientRoles": {
+        "realm-management": ["manage-organizations"]
+      }
+    },
+    {
+      "username": "admin",
+      "email": "admin@localhost",
+      "enabled": true,
+      "emailVerified": false,
+      "realmRoles": ["infocell-admin"]
+    }
+  ],
+  "clientScopeMappings": {
+    "infocell-api": [
+      {
+        "client": "realm-management",
+        "roles": ["manage-organizations"]
+      }
+    ]
+  }
+}
