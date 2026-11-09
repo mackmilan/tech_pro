@@ -92,3 +92,8 @@ O endpoint de documento fiscal atualmente cria um registro `pending`; **não tra
 ## Antes de produção
 
 Implementar autenticação/autorização nas APIs com OIDC/Sanctum e perfis/escopo por filial, isolamento multi-tenant, regras de transferência/ajustes, integração fiscal real, auditoria e testes de integração; terminar os formulários e fluxos Vue.
+
+## Licença
+
+Este projeto está sob a licença [MIT](LICENSE).
+
